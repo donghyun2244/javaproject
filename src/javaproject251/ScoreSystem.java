@@ -22,7 +22,7 @@ public class ScoreSystem {
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
             
             boolean hasContent = false;
-            // 파일 내용을 줄 단위로 읽습니다.
+            // 파일 내용을 줄 단위로 읽음.
             while ((line = br.readLine()) != null) {// 해당 파일이 비어져 있으면 실행이 안됨
                 System.out.println("[CSV Data] " + line);
                 hasContent = true;
