@@ -6,7 +6,8 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class ScoreSystem {
-
+			//들어가는지 테스트 용
+	
 	public static void main(String[] args) {
 		testCsvAccess();
 		
@@ -66,6 +67,7 @@ public class ScoreSystem {
 		
 	}
 }
+
 
 
 
