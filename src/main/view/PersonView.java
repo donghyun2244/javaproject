@@ -1,138 +1,145 @@
 package view;
 
+import java.util.ArrayList;
+import java.util.Scanner;
+
 import controller.PersonController;
 import exception.DuplicateException;
 import exception.NotFoundException;
 import exception.ValidationException;
-import model.Person;
-
-import java.util.Scanner;
 
 public class PersonView {
 
-    private final PersonController personController;
-    private final Scanner sc = new Scanner(System.in);
+    private PersonController personController;
+    private Scanner scanner;
 
     public PersonView(PersonController personController) {
         this.personController = personController;
+        this.scanner = new Scanner(System.in);
     }
 
-    public void showMenu() {
-        while (true) {
-            System.out.println("==================================");
-            System.out.println("          사용자 관리");
-            System.out.println("==================================");
-            System.out.println("1. 학생 등록");
-            System.out.println("2. 교수 등록");
-            System.out.println("3. 사용자 정보 수정");
-            System.out.println("4. 사용자 정보 삭제");
-            System.out.println("5. 사용자 정보 조회(ID)");
-            System.out.println("0. 뒤로가기");
-            System.out.print("메뉴 선택 >> ");
+    // 1. 학생 등록 View
+    public void registerStudentView() {
+        System.out.println("\n=== [학생 등록] ===");
 
-            String input = sc.nextLine();
+        System.out.print("이름: ");
+        String name = scanner.nextLine();
 
-            switch (input) {
-                case "1": registerStudentView(); break;
-                case "2": registerProfessorView(); break;
-                case "3": updatePersonView(); break;
-                case "4": deletePersonView(); break;
-                case "5": searchPersonView(); break;
-                case "0": return;
-                default:
-                    System.out.println("잘못된 입력입니다.");
-            }
-        }
-    }
+        System.out.print("아이디: ");
+        String id = scanner.nextLine();
 
-    // 1. 학생 등록
-    private void registerStudentView() {
-        System.out.println("------ 학생 등록 ------");
-        System.out.print("이름 : ");
-        String name = sc.nextLine();
-
-        System.out.print("학번(ID) : ");
-        String id = sc.nextLine();
-
-        System.out.print("비밀번호 : ");
-        String pw = sc.nextLine();
+        System.out.print("비밀번호: ");
+        String pw = scanner.nextLine();
 
         try {
             personController.registerStudent(name, id, pw);
-            System.out.println("학생 등록이 완료되었습니다.");
+            System.out.println(">> 학생 등록 성공!");
         } catch (DuplicateException e) {
-            System.out.println(e.getMessage());
+            System.out.println("[등록 실패] " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("[시스템 오류] 알 수 없는 오류가 발생했습니다.");
         }
     }
 
-    // 2. 교수 등록
-    private void registerProfessorView() {
-        System.out.println("------ 교수 등록 ------");
-        System.out.print("이름 : ");
-        String name = sc.nextLine();
+    // 2. 교수 등록 View
+    public void registerProfessorView() {
+        System.out.println("\n=== [교수 등록] ===");
 
-        System.out.print("교번(ID) : ");
-        String id = sc.nextLine();
+        System.out.print("이름: ");
+        String name = scanner.nextLine();
 
-        System.out.print("비밀번호 : ");
-        String pw = sc.nextLine();
+        System.out.print("아이디: ");
+        String id = scanner.nextLine();
+
+        System.out.print("비밀번호: ");
+        String pw = scanner.nextLine();
 
         try {
             personController.registerProfessor(name, id, pw);
-            System.out.println("교수 등록이 완료되었습니다.");
+            System.out.println(">> 교수 등록 성공!");
         } catch (DuplicateException e) {
-            System.out.println(e.getMessage());
+            System.out.println("[등록 실패] " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("[시스템 오류] 알 수 없는 오류가 발생했습니다.");
         }
     }
 
-    // 3. 사용자 정보 수정
-    private void updatePersonView() {
-        System.out.println("------ 사용자 정보 수정 ------");
-        System.out.print("수정할 사용자 ID : ");
-        String id = sc.nextLine();
+    // 3. 사용자 정보 수정 View
+    public void updatePersonView() {
+        System.out.println("\n=== [사용자 정보 수정] ===");
 
-        System.out.print("새 이름 : ");
-        String newName = sc.nextLine();
+        System.out.print("수정할 사용자 ID: ");
+        String id = scanner.nextLine();
 
-        System.out.print("새 비밀번호 : ");
-        String newPw = sc.nextLine();
+        System.out.print("새 이름: ");
+        String newName = scanner.nextLine();
+
+        System.out.print("새 비밀번호: ");
+        String newPw = scanner.nextLine();
 
         try {
             personController.updatePerson(id, newName, newPw);
-            System.out.println("사용자 정보가 수정되었습니다.");
-        } catch (NotFoundException | ValidationException e) {
-            System.out.println(e.getMessage());
+            System.out.println(">> 정보 수정 성공!");
+        } catch (NotFoundException e) {
+            System.out.println("[수정 실패] " + e.getMessage());
+        } catch (ValidationException e) {
+            System.out.println("[입력 오류] " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("[시스템 오류] 알 수 없는 오류가 발생했습니다.");
         }
     }
 
-    // 4. 사용자 삭제
-    private void deletePersonView() {
-        System.out.println("------ 사용자 정보 삭제 ------");
-        System.out.print("삭제할 사용자 ID : ");
-        String id = sc.nextLine();
+    // 4. 사용자 삭제 View
+    public void deletePersonView() {
+        System.out.println("\n=== [사용자 삭제] ===");
+
+        System.out.print("삭제할 사용자 ID: ");
+        String id = scanner.nextLine();
 
         try {
             personController.deletePerson(id);
-            System.out.println("사용자 정보가 삭제되었습니다.");
+            System.out.println(">> 사용자 삭제 성공!");
         } catch (NotFoundException e) {
-            System.out.println(e.getMessage());
+            System.out.println("[삭제 실패] " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("[시스템 오류] 알 수 없는 오류가 발생했습니다.");
         }
     }
 
-    // 5. 사용자 조회 (ID로 조회)
-    private void searchPersonView() {
-        System.out.println("------ 사용자 정보 조회 (ID) ------");
-        System.out.print("조회할 ID : ");
-        String id = sc.nextLine();
+    // 5. ID로 사용자 조회 View
+    public void findPersonByIdView() {
+        System.out.println("\n=== [ID로 사용자 조회] ===");
+
+        System.out.print("조회할 사용자 ID: ");
+        String id = scanner.nextLine();
 
         try {
-            Person p = personController.findPersonById(id);
-
-            System.out.println("\n[조회 결과]");
-            System.out.println("이름 : " + p.getName());
-            System.out.println("아이디 : " + p.getMyId());
+            String info = personController.getPersonInfoById(id); // 문자열만 받음
+            System.out.println(info);
         } catch (NotFoundException e) {
-            System.out.println(e.getMessage());
+            System.out.println("[조회 실패] " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("[시스템 오류] 알 수 없는 오류가 발생했습니다.");
+        }
+    }
+
+    // 6. 전체 사용자 목록 조회 View
+    public void findAllUsersView() {
+        System.out.println("\n=== [전체 사용자 목록] ===");
+
+        try {
+            ArrayList<String> infos = personController.getAllUsersInfo();
+
+            if (infos == null || infos.isEmpty()) {
+                System.out.println("등록된 사용자가 없습니다.");
+                return;
+            }
+
+            for (String info : infos) {
+                System.out.println(info);
+            }
+        } catch (Exception e) {
+            System.out.println("[시스템 오류] 알 수 없는 오류가 발생했습니다.");
         }
     }
 }
