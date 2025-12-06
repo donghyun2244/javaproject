@@ -1,11 +1,11 @@
-package view;
+package main.view;
 
 import java.util.Scanner;
-import controller.AuthController;
-import model.Person;
-import exception.ValidationException;
-import exception.NotFoundException;
-import exception.AuthenticationException;
+import main.controller.AuthController;
+import main.model.Person;
+import main.exception.ValidationException;
+import main.exception.NotFoundException;
+import main.exception.AuthenticationException;
 
 public class AuthView {
 

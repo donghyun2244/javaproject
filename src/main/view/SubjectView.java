@@ -2,13 +2,13 @@ package view; // 패키지 선언 추가
 
 import java.util.Scanner;
 import java.util.ArrayList;
-import controller.SubjectController;
-import model.Subject;
+import main.controller.SubjectController;
+import main.model.Subject;
 // 문서에 명시된 예외 클래스 import
-import exception.ValidationException;
-import exception.NotFoundException;
-import exception.DuplicateException;
-import exception.ReferentialIntegrityException;
+import main.exception.ValidationException;
+import main.exception.NotFoundException;
+import main.exception.DuplicateException;
+import main.exception.ReferentialIntegrityException;
 
 public class SubjectView {
 

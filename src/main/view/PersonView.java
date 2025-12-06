@@ -3,10 +3,10 @@ package view;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import controller.PersonController;
-import exception.DuplicateException;
-import exception.NotFoundException;
-import exception.ValidationException;
+import main.controller.PersonController;
+import main.exception.DuplicateException;
+import main.exception.NotFoundException;
+import main.exception.ValidationException;
 
 public class PersonView {
 
