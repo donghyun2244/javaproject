@@ -6,7 +6,7 @@ import java.util.HashMap;
 import main.exception.DuplicateException;
 import main.exception.NotFoundException;
 import main.exception.ValidationException;
-import model.Subject;
+import main.model.Subject;
 
 public class MemorySubjectRepository implements SubjectRepository {
     private static SubjectRepository instance;

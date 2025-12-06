@@ -6,7 +6,7 @@ import main.exception.DuplicateException;
 import main.exception.NotFoundException;
 import main.exception.ReferentialIntegrityException;
 import main.exception.ValidationException;
-import model.Person;
+import main.model.Person;
 
 public class DBUserRepository implements UserRepository {
     private static UserRepository instance;

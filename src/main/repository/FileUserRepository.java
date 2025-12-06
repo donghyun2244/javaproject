@@ -11,10 +11,10 @@ import main.exception.DuplicateException;
 import main.exception.NotFoundException;
 import main.exception.ReferentialIntegrityException;
 import main.exception.ValidationException;
-import model.Chancellor;
-import model.Person;
-import model.Professor;
-import model.Student;
+import main.model.Chancellor;
+import main.model.Person;
+import main.model.Professor;
+import main.model.Student;
 
 public class FileUserRepository implements UserRepository {
     private static final String DATA_ROOT = "Data";

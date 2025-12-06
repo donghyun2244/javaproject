@@ -11,7 +11,7 @@ import java.util.HashMap;
 import main.exception.DuplicateException;
 import main.exception.NotFoundException;
 import main.exception.ValidationException;
-import model.Subject;
+import main.model.Subject;
 
 public class FileSubjectRepository implements SubjectRepository {
     private static final String DATA_ROOT = "Data";

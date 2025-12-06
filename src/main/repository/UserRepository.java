@@ -6,7 +6,7 @@ import main.exception.AuthenticationException;
 import main.exception.DuplicateException;
 import main.exception.NotFoundException;
 import main.exception.ValidationException;
-import model.Person;
+import main.model.Person;
 
 public interface UserRepository {
     Person add(Person user) throws ValidationException, DuplicateException;
