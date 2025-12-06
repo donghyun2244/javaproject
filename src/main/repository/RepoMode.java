@@ -1,6 +1,6 @@
 package main.repository;
 
-enum RepoMode {
+public enum RepoMode {
     MEMORY,
     FILE,
     DB

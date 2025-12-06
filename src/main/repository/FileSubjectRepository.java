@@ -151,7 +151,11 @@ public class FileSubjectRepository implements SubjectRepository {
 
     @Override
     public void remove(String idNum) throws NotFoundException {
-        validateIdNum(idNum);
+        try {
+            validateIdNum(idNum);
+        } catch (ValidationException e) {
+            e.printStackTrace();
+        }
         Path dir = findSubjectDirByIdNum(idNum);
         if (dir == null) {
             throw new NotFoundException("Subject not found: " + idNum);

@@ -89,7 +89,11 @@ public class MemorySubjectRepository implements SubjectRepository {
 
     @Override
     public void remove(String idNum) throws NotFoundException {
-        validateIdNum(idNum);
+        try {
+            validateIdNum(idNum);
+        } catch (ValidationException e) {
+            e.printStackTrace();
+        }
         String trimmed = idNum.trim();
         for (int i = 0; i < subjects.size(); i++) {
             if (subjects.get(i).getIdNum().equals(trimmed)) {

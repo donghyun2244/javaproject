@@ -2,6 +2,7 @@ package main.repository;
 
 import java.util.ArrayList;
 
+import main.exception.AuthenticationException;
 import main.exception.DuplicateException;
 import main.exception.NotFoundException;
 import main.exception.ReferentialIntegrityException;
@@ -131,6 +132,30 @@ public class MemoryUserRepository implements UserRepository {
         } catch (ValidationException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Person getById(String userId) throws ValidationException, NotFoundException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getById'");
+    }
+
+    @Override
+    public boolean existsById(String userId) throws ValidationException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'existsById'");
+    }
+
+    @Override
+    public void changePassword(String userId, String newPassword) throws ValidationException, NotFoundException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'changePassword'");
+    }
+
+    @Override
+    public Person authenticate(String userId, String password) throws ValidationException, AuthenticationException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'authenticate'");
     }
 }
 

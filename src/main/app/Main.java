@@ -62,10 +62,10 @@ public class Main {
                     case "1":
                         // AuthView에 로그인 처리 메서드가 있다고 가정 (예: loginMenu)
                         // 만약 없다면 AuthController를 직접 호출하는 로직이 필요할 수 있음
-                         authView.loginMenu(); 
+                         AuthView.loginMenu(); 
                         break;
                     case "2":
-                         authView.registerMenu();
+                         AuthView.registerMenu();
                         break;
                     case "0":
                         System.out.println("프로그램을 종료합니다.");

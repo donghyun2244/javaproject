@@ -1,4 +1,4 @@
-package view; // 패키지 선언 추가
+package main.view; // 패키지 선언 추가
 
 import java.util.Scanner;
 import java.util.ArrayList;
