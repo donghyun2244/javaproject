@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import main.exception.DuplicateException;
 import main.exception.NotFoundException;
 import main.exception.ValidationException;
-import model.Subject;
+import main.model.Subject;
 
 public class DBSubjectRepository implements SubjectRepository {
     private static SubjectRepository instance;
