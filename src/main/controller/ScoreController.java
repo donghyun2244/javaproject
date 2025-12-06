@@ -33,7 +33,16 @@ public class ScoreController {
     }
 
     public double getSubjectAverage(String subjectCode) throws NotFoundException {
-        Subject sub = getSubjectRepo().findByIdNum(subjectCode);
+        Subject sub = null;
+        try {
+            sub = getSubjectRepo().findByIdNum(subjectCode);
+        } catch (NotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (ValidationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         if (sub == null) throw new NotFoundException("과목을 찾을 수 없습니다.");
         
         // Subject 클래스 내 점수 저장 구조가 HashMap<String, Integer> scores 라고 가정

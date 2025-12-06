@@ -1,6 +1,5 @@
 package main.controller;
 
-import java.io.IOException;
 import main.model.Person;
 import main.repository.UserRepository;
 import main.repository.SubjectRepository;
@@ -11,12 +10,10 @@ public class SystemController {
 
     private static SystemController instance;
     private Person currentUser;
-    
-    // 데이터 저장소
+
     private UserRepository userRepo;
     private SubjectRepository subjectRepo;
 
-    // 하위 컨트롤러
     private AuthController authController;
     private PersonController personController;
     private SubjectController subjectController;
@@ -24,7 +21,6 @@ public class SystemController {
 
     private SystemController() {
         this.currentUser = null;
-        // 컨트롤러 초기화
         this.authController = new AuthController();
         this.personController = new PersonController();
         this.subjectController = new SubjectController();
@@ -38,17 +34,14 @@ public class SystemController {
         return instance;
     }
 
+    // [수정] loadData() 호출 삭제
     public void initSystem() {
         try {
-            // [설정] 파일 모드로 저장소 생성
             RepoMode mode = RepoMode.FILE;
             this.userRepo = RepoFactory.getUserRepository(mode);
             this.subjectRepo = RepoFactory.getSubjectRepository(mode);
-
-            System.out.println("[시스템] 데이터 로드 중...");
-            this.userRepo.loadData();
-            this.subjectRepo.loadData();
-            System.out.println("[시스템] 초기화 완료.");
+            
+            System.out.println("[시스템] 초기화 완료 (File Mode).");
 
         } catch (Exception e) {
             System.err.println("[오류] 시스템 초기화 실패: " + e.getMessage());
@@ -56,18 +49,11 @@ public class SystemController {
         }
     }
 
+    // [수정] saveData() 호출 삭제 (파일 모드는 즉시 저장되므로 불필요)
     public void saveAll() {
-        try {
-            System.out.println("[시스템] 데이터 저장 중...");
-            this.userRepo.saveData();
-            this.subjectRepo.saveData();
-            System.out.println("[시스템] 저장 완료.");
-        } catch (IOException e) {
-            System.err.println("[오류] 데이터 저장 실패: " + e.getMessage());
-        }
+        System.out.println("[시스템] 종료 중... (데이터는 자동 저장되었습니다)");
     }
 
-    // [중요] 하위 컨트롤러들이 저장소에 접근할 수 있게 Getter 추가
     public UserRepository getUserRepository() { return userRepo; }
     public SubjectRepository getSubjectRepository() { return subjectRepo; }
 

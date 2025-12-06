@@ -37,7 +37,7 @@ public class FileUserRepository implements UserRepository {
     }
 
     @Override
-    public void add(Person p) throws DuplicateException, ValidationException {
+    public void add(Person p) throws DuplicateException, ValidationException ,ValidationException{
         if (p == null) {
             throw new ValidationException("Person cannot be null");
         }
