@@ -117,7 +117,7 @@ public class FileUserRepository implements UserRepository {
     }
 
     @Override
-    public void remove(String myId) throws NotFoundException, ReferentialIntegrityException {
+    public void remove(String myId) throws NotFoundException, ReferentialIntegrityException, ValidationException {
         try {
             validateMyId(myId);
         } catch (ValidationException e) {

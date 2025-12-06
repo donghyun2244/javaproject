@@ -7,7 +7,6 @@ import main.exception.DuplicateException;
 import main.exception.NotFoundException;
 import main.exception.ReferentialIntegrityException;
 import main.exception.ValidationException;
-import main.exception.ReferentialIntegrityException;
 import main.model.Person;
 
 public interface UserRepository {

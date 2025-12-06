@@ -111,12 +111,26 @@ public class Main {
         System.out.print("선택 >> ");
         String choice = scanner.nextLine();
 
-        if (choice.equals("1")) {
-            personView.registerStudentView();
-        } else if (choice.equals("2")) {
-            personView.registerProfessorView();
-        } else {
-            System.out.println("잘못된 선택입니다.");
+        try {
+            if (choice.equals("1")) {
+                if (personView != null) {
+                    personView.registerStudentView();
+                } else {
+                    System.out.println("회원가입 기능을 사용할 수 없습니다. 관리자에게 문의하세요.");
+                }
+            } else if (choice.equals("2")) {
+                if (personView != null) {
+                    personView.registerProfessorView();
+                } else {
+                    System.out.println("회원가입 기능을 사용할 수 없습니다. 관리자에게 문의하세요.");
+                }
+            } else {
+                System.out.println("잘못된 선택입니다.");
+            }
+        } catch (Exception e) {
+            // 상세 오류 메시지 출력: "알 수 없는 오류" 대신 예외 메시지와 스택트레이스로 원인 파악 가능
+            System.out.println("회원가입 중 오류가 발생했습니다: " + (e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName()));
+            e.printStackTrace();
         }
     }
 
