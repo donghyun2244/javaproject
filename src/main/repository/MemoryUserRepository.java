@@ -7,8 +7,10 @@ import main.exception.DuplicateException;
 import main.exception.NotFoundException;
 import main.exception.ReferentialIntegrityException;
 import main.exception.ValidationException;
+import main.model.Chancellor;
 import main.model.Person;
-import main.model.
+import main.model.Student;
+import main.model.Professor;
 
 public class MemoryUserRepository implements UserRepository {
     private static UserRepository instance;
@@ -117,21 +119,22 @@ public class MemoryUserRepository implements UserRepository {
     }
 
     private Person clonePerson(Person original) {
-        try {
-            if (original.getClass().getName().equals("model.Student")) {
-                return new model.Student(original.getName(), original.getMyId(), "" );
-            }
-            if (original.getClass().getName().equals("model.Professor")) {
-                return new model.Professor(original.getName(), original.getMyId(), "");
-            }
-            if (original.getClass().getName().equals("model.Chancellor")) {
-                return new model.Chancellor(original.getName(), original.getMyId(), "");
-            }
-            return original;
-        } catch (ValidationException e) {
-            throw new RuntimeException(e);
+    try {
+        if (original instanceof Student) {
+            return new Student(original.getName(), original.getMyId(), ""); 
         }
+        if (original instanceof Professor) {
+            return new Professor(original.getName(), original.getMyId(), "");
+        }
+        if (original instanceof Chancellor) {
+            return new Chancellor(original.getName(), original.getMyId(), "");
+        }
+        return original; 
+        
+    } catch (ValidationException e) {
+        throw new RuntimeException("객체 복사 중 오류 발생", e);
     }
+}
 
     @Override
     public Person getById(String userId) throws ValidationException, NotFoundException {
