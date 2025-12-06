@@ -2,6 +2,7 @@ package main.repository;
 
 import java.util.ArrayList;
 
+import main.exception.AuthenticationException;
 import main.exception.DuplicateException;
 import main.exception.NotFoundException;
 import main.exception.ReferentialIntegrityException;
@@ -23,12 +24,10 @@ public class DBUserRepository implements UserRepository {
         throw new UnsupportedOperationException("DBUserRepository.add is not implemented");
     }
 
-    @Override
     public boolean checkExistByMyId(String myId) throws ValidationException {
         throw new UnsupportedOperationException("DBUserRepository.checkExistByMyId is not implemented");
     }
 
-    @Override
     public Person findByMyId(String myId) throws NotFoundException, ValidationException {
         throw new UnsupportedOperationException("DBUserRepository.findByMyId is not implemented");
     }
@@ -46,6 +45,30 @@ public class DBUserRepository implements UserRepository {
     @Override
     public void remove(String myId) throws NotFoundException, ReferentialIntegrityException {
         throw new UnsupportedOperationException("DBUserRepository.remove is not implemented");
+    }
+
+    @Override
+    public Person getById(String userId) throws ValidationException, NotFoundException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getById'");
+    }
+
+    @Override
+    public boolean existsById(String userId) throws ValidationException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'existsById'");
+    }
+
+    @Override
+    public void changePassword(String userId, String newPassword) throws ValidationException, NotFoundException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'changePassword'");
+    }
+
+    @Override
+    public Person authenticate(String userId, String password) throws ValidationException, AuthenticationException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'authenticate'");
     }
 }
 

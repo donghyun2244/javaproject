@@ -16,29 +16,21 @@ public class Main {
     private static Scanner scanner = new Scanner(System.in);
     private static SystemController system = SystemController.getInstance();
 
-    // View 객체들 (컨트롤러 주입)
+    // View 객체들
     private static AuthView authView;
     private static PersonView personView;
     private static SubjectView subjectView;
     private static ScoreView scoreView;
 
     public static void main(String[] args) {
-        // 1. 시스템 초기화 (데이터 로드)
-        system.initSystem();
-
-        // 2. View 인스턴스 생성 (SystemController에서 컨트롤러 가져와서 주입)
-        initViews();
-
-        // 3. 메인 루프 실행
-        runMainLoop();
-
-        // 4. 시스템 종료 시 저장
-        system.saveAll();
+        system.initSystem(); // 1. 초기화
+        initViews();         // 2. 뷰 생성
+        runMainLoop();       // 3. 실행
+        system.saveAll();    // 4. 종료 시 저장
         scanner.close();
     }
 
     private static void initViews() {
-        // SystemController가 싱글톤이므로 이미 생성된 하위 컨트롤러들을 가져옴
         authView = new AuthView(system.getAuthController());
         personView = new PersonView(system.getPersonController());
         subjectView = new SubjectView(system.getSubjectController());
@@ -60,12 +52,12 @@ public class Main {
                 String choice = scanner.nextLine();
                 switch (choice) {
                     case "1":
-                        // AuthView에 로그인 처리 메서드가 있다고 가정 (예: loginMenu)
-                        // 만약 없다면 AuthController를 직접 호출하는 로직이 필요할 수 있음
-                         AuthView.loginMenu(); 
+                        // [수정] 객체 변수명(authView) 사용 및 메서드명(loginView) 수정
+                        authView.loginView(); 
                         break;
                     case "2":
-                         AuthView.registerMenu();
+                        // [수정] 회원가입 메뉴 직접 구현 (AuthView에 registerMenu가 없으므로)
+                        runRegisterMenu();
                         break;
                     case "0":
                         System.out.println("프로그램을 종료합니다.");
@@ -79,7 +71,7 @@ public class Main {
             else {
                 System.out.println("\n===== [" + currentUser.getName() + "님 환영합니다] =====");
                 System.out.println("1. 내 정보 관리");
-                System.out.println("2. 과목 관리 (수강신청/개설)");
+                System.out.println("2. 과목 관리");
                 System.out.println("3. 성적 관리");
                 System.out.println("9. 로그아웃");
                 System.out.println("0. 종료");
@@ -88,8 +80,8 @@ public class Main {
                 String choice = scanner.nextLine();
                 switch (choice) {
                     case "1":
-                        // 내 정보 보기/수정
-                        // personView.showMyInfo(currentUser); 
+                        // PersonView에 내 정보 보기 기능이 있다면 호출 (현재 코드엔 없어서 주석)
+                         personView.findPersonByIdView(); // 임시로 조회 기능 연결
                         break;
                     case "2":
                         runSubjectMenu(currentUser);
@@ -98,12 +90,12 @@ public class Main {
                         runScoreMenu(currentUser);
                         break;
                     case "9":
-                        system.setCurrentUser(null);
-                        System.out.println("로그아웃 되었습니다.");
+                        // [수정] 로그아웃 처리
+                        authView.logoutView();
                         break;
                     case "0":
                         System.out.println("프로그램을 종료합니다.");
-                        return; // 메인 루프 종료 -> saveAll() 호출됨
+                        return;
                     default:
                         System.out.println("잘못된 입력입니다.");
                 }
@@ -111,13 +103,28 @@ public class Main {
         }
     }
 
-    // === 서브 메뉴: 과목 관리 ===
+    // [추가] 회원가입 서브 메뉴
+    private static void runRegisterMenu() {
+        System.out.println("\n--- [회원가입] ---");
+        System.out.println("1. 학생으로 가입");
+        System.out.println("2. 교수로 가입");
+        System.out.print("선택 >> ");
+        String choice = scanner.nextLine();
+
+        if (choice.equals("1")) {
+            personView.registerStudentView();
+        } else if (choice.equals("2")) {
+            personView.registerProfessorView();
+        } else {
+            System.out.println("잘못된 선택입니다.");
+        }
+    }
+
     private static void runSubjectMenu(Person user) {
         while (true) {
             System.out.println("\n--- [과목 관리 메뉴] ---");
-            // 역할별로 보여줄 메뉴를 다르게 구성
             if (user instanceof Professor || user instanceof Chancellor) {
-                System.out.println("1. 과목 개설 (교수/담당자)");
+                System.out.println("1. 과목 개설");
                 System.out.println("2. 과목 정보 수정");
                 System.out.println("3. 과목 폐강");
             }
@@ -131,29 +138,18 @@ public class Main {
             String choice = scanner.nextLine();
             if (choice.equals("0")) break;
 
+            // 권한 체크 없이 메뉴 호출 시 컨트롤러/뷰 내부에서 예외처리 되거나, 여기서 if문으로 막아야 함
             switch (choice) {
-                case "1":
-                    subjectView.createSubjectView();
-                    break;
-                case "2":
-                    subjectView.updateSubjectView();
-                    break;
-                case "3":
-                    subjectView.deleteSubjectView();
-                    break;
-                case "4":
-                    subjectView.applySubjectView();
-                    break;
-                case "5":
-                    subjectView.printAllSubjects();
-                    break;
-                default:
-                    System.out.println("잘못된 입력이거나 권한이 없습니다.");
+                case "1": subjectView.createSubjectView(); break;
+                case "2": subjectView.updateSubjectView(); break;
+                case "3": subjectView.deleteSubjectView(); break;
+                case "4": subjectView.applySubjectView(); break;
+                case "5": subjectView.printAllSubjects(); break;
+                default: System.out.println("잘못된 입력입니다.");
             }
         }
     }
 
-    // === 서브 메뉴: 성적 관리 ===
     private static void runScoreMenu(Person user) {
         while (true) {
             System.out.println("\n--- [성적 관리 메뉴] ---");
@@ -170,20 +166,11 @@ public class Main {
             if (choice.equals("0")) break;
 
             switch (choice) {
-                case "1":
-                    scoreView.registerScoreView();
-                    break;
-                case "2":
-                    scoreView.updateScoreView();
-                    break;
-                case "3":
-                    scoreView.printSubjectStatisticsView();
-                    break;
-                case "4":
-                    scoreView.checkScholarshipView();
-                    break;
-                default:
-                    System.out.println("잘못된 입력이거나 권한이 없습니다.");
+                case "1": scoreView.registerScoreView(); break;
+                case "2": scoreView.updateScoreView(); break;
+                case "3": scoreView.printSubjectStatisticsView(); break;
+                case "4": scoreView.checkScholarshipView(); break;
+                default: System.out.println("잘못된 입력입니다.");
             }
         }
     }

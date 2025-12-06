@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import main.exception.AuthenticationException;
 import main.exception.DuplicateException;
 import main.exception.NotFoundException;
 import main.exception.ReferentialIntegrityException;
@@ -56,14 +57,12 @@ public class FileUserRepository implements UserRepository {
         }
     }
 
-    @Override
     public boolean checkExistByMyId(String myId) throws ValidationException {
         validateMyId(myId);
         Path dir = findPersonDirById(myId);
         return dir != null && Files.exists(dir);
     }
 
-    @Override
     public Person findByMyId(String myId) throws NotFoundException, ValidationException {
         validateMyId(myId);
         Path dir = findPersonDirById(myId);
@@ -99,7 +98,6 @@ public class FileUserRepository implements UserRepository {
         return result;
     }
 
-    @Override
     public void update(Person p) throws NotFoundException, ValidationException {
         if (p == null) {
             throw new ValidationException("Person cannot be null");
@@ -120,7 +118,12 @@ public class FileUserRepository implements UserRepository {
 
     @Override
     public void remove(String myId) throws NotFoundException, ReferentialIntegrityException {
-        validateMyId(myId);
+        try {
+            validateMyId(myId);
+        } catch (ValidationException e) {
+            
+            e.printStackTrace();
+        }
         Path dir = findPersonDirById(myId);
         if (dir == null || !Files.exists(dir)) {
             throw new NotFoundException("User not found: " + myId);
@@ -222,6 +225,30 @@ public class FileUserRepository implements UserRepository {
         if (!trimmed.matches("[A-Za-z0-9]+")) {
             throw new ValidationException("ID must contain only English letters and digits");
         }
+    }
+
+    @Override
+    public Person getById(String userId) throws ValidationException, NotFoundException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getById'");
+    }
+
+    @Override
+    public boolean existsById(String userId) throws ValidationException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'existsById'");
+    }
+
+    @Override
+    public void changePassword(String userId, String newPassword) throws ValidationException, NotFoundException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'changePassword'");
+    }
+
+    @Override
+    public Person authenticate(String userId, String password) throws ValidationException, AuthenticationException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'authenticate'");
     }
 }
 
