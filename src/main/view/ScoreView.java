@@ -4,10 +4,9 @@ import java.util.Scanner;
 import main.controller.ScoreController;
 import main.exception.ValidationException;
 import main.exception.NotFoundException;
-import main.exception.PermissionException;
 import java.util.ArrayList;
 
-import java.util.Scanner;
+
 
 
 
@@ -63,7 +62,24 @@ public class ScoreView {
         System.out.println("\n[성적 수정]");
         System.out.print("과목 코드 입력: ");
         String subjectCode = scanner.nextLine();
-        System.out.print("학생 ID 입력: ");
+
+        try {
+            ArrayList<String> students = scoreController.getEnrolledStudentsInfo(subjectCode);
+            
+            System.out.println("\n--- [" + subjectCode + "번 과목 수강생 목록] ---");
+            if (students.isEmpty()) {
+                System.out.println("(수강생이 없습니다)");
+            } else {
+                for (String info : students) {
+                    System.out.println(" - " + info);
+                }
+            }
+            System.out.println("--------------------------------");
+        } catch (Exception e) {
+           
+            System.out.println(">> 목록 조회 실패: " + e.getMessage());
+            return; 
+        } System.out.print("학생 ID 입력: ");
         String studentId = scanner.nextLine();
         System.out.print("수정할 점수 입력(0~100): ");
 
