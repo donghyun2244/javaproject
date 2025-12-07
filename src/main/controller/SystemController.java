@@ -34,7 +34,6 @@ public class SystemController {
         return instance;
     }
 
-    // [수정] loadData() 호출 삭제
     public void initSystem() {
         try {
             RepoMode mode = RepoMode.FILE;
@@ -49,7 +48,6 @@ public class SystemController {
         }
     }
 
-    // [수정] saveData() 호출 삭제 (파일 모드는 즉시 저장되므로 불필요)
     public void saveAll() {
         System.out.println("[시스템] 종료 중... (데이터는 자동 저장되었습니다)");
     }

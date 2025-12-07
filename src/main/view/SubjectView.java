@@ -94,7 +94,6 @@ public class SubjectView {
     
     public void printAllSubjects() {
         System.out.println("\n[전체 과목 목록]");
-        // getAllSubjects가 ArrayList<Subject>를 반환한다고 가정
         ArrayList<Subject> list = subjectController.getAllSubjects();
         if(list.isEmpty()) {
             System.out.println(">> 등록된 과목이 없습니다.");

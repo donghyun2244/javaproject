@@ -108,21 +108,27 @@ public class FileSubjectRepository implements SubjectRepository {
             return result;
         }
         try {
-            Files.list(base).filter(Files::isDirectory).forEach(dir -> {
-                try {
-                    String idNum = readString(dir.resolve("idNum.txt"));
-                    String subjectName = readString(dir.resolve("subjectName.txt"));
-                    String professorId = readString(dir.resolve("professorId.txt"));
-                    ArrayList<String> students = readLines(dir.resolve("studentsId.txt"));
-                    HashMap<String, Integer> scores = readScores(dir.resolve("scores.txt"));
-                    Subject s = new Subject(idNum, subjectName, professorId, students, scores);
-                    result.add(s);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            });
+            Files.list(base)
+                .filter(Files::isDirectory)
+                .forEach(dir -> {
+                    try {
+                        String idNum = readString(dir.resolve("idNum.txt"));
+                        String subjectName = readString(dir.resolve("subjectName.txt"));
+                        String professorId = readString(dir.resolve("professorId.txt"));
+                        ArrayList<String> students = readLines(dir.resolve("studentsId.txt"));
+                        HashMap<String, Integer> scores = readScores(dir.resolve("scores.txt"));
+                        try {
+                            Subject s = new Subject(idNum, subjectName, professorId, students, scores);
+                            result.add(s);
+                        } catch (ValidationException ve) {
+                            System.err.println("Validation failed for subject in directory: " + dir + " - " + ve.getMessage());
+                        }
+                    } catch (IOException e) {
+                        System.err.println("Failed to read subject directory: " + dir + " - " + e.getMessage());
+                    }
+                });
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to list subject directories", e);
         }
         return result;
     }
@@ -289,5 +295,6 @@ public class FileSubjectRepository implements SubjectRepository {
             throw new ValidationException("ID must contain only digits");
         }
     }
+
 }
 

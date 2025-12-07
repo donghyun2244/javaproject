@@ -26,7 +26,7 @@ public class MemorySubjectRepository implements SubjectRepository {
     @Override
     public void add(Subject s) throws DuplicateException, ValidationException {
         if (s == null) {
-            throw new ValidationException("Subject cannot be null");
+            throw new ValidationException("과목은 비어있을 수 없습니다.");
         }
         String idNum = s.getIdNum();
         validateIdNum(idNum);
@@ -72,7 +72,7 @@ public class MemorySubjectRepository implements SubjectRepository {
     @Override
     public void update(Subject s) throws NotFoundException, ValidationException {
         if (s == null) {
-            throw new ValidationException("Subject cannot be null");
+            throw new ValidationException("과목은 비어있을 수 없습니다.");
         }
         String idNum = s.getIdNum();
         validateIdNum(idNum);
@@ -106,17 +106,17 @@ public class MemorySubjectRepository implements SubjectRepository {
 
     private void validateIdNum(String idNum) throws ValidationException {
         if (idNum == null) {
-            throw new ValidationException("ID cannot be null");
+            throw new ValidationException("ID는 비어있을 수 없습니다.");
         }
         String trimmed = idNum.trim();
         if (trimmed.isEmpty()) {
-            throw new ValidationException("ID cannot be empty");
+            throw new ValidationException("ID는 비어있을 수 없습니다.");
         }
         if (trimmed.length() != 4) {
-            throw new ValidationException("ID must be exactly 4 characters");
+            throw new ValidationException("ID는 정확히 4자여야 합니다.");
         }
         if (!trimmed.matches("[0-9]{4}")) {
-            throw new ValidationException("ID must contain only digits");
+            throw new ValidationException("ID는 숫자만 포함할 수 있습니다.");
         }
     }
 

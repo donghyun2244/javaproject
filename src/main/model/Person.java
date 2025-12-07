@@ -21,23 +21,24 @@ public abstract class Person implements Loginable {
         if (trimmed.isEmpty()) {
             throw new ValidationException("Name cannot be empty");
         }
-        boolean hasKorean = trimmed.matches(".*[\uAC00-\uD7A3].*");
-        boolean hasEnglish = trimmed.matches(".*[A-Za-z].*");
-        if (hasKorean && hasEnglish) {
-            throw new ValidationException("Name cannot mix Korean and English");
+
+        String normalized = trimmed.replaceAll("\\s+", ""); 
+        normalized = normalized.replace("·", ""); 
+
+        if (normalized.isEmpty()) {
+            throw new ValidationException("Name cannot be empty after normalization");
         }
-        if (hasKorean) {
-            if (!trimmed.matches("[\uAC00-\uD7A3]+")) {
-                throw new ValidationException("Name contains invalid characters for Korean name");
-            }
-        } else if (hasEnglish) {
-            if (!trimmed.matches("[A-Za-z]+")) {
-                throw new ValidationException("Name contains invalid characters for English name");
-            }
-        } else {
-            throw new ValidationException("Name must contain only Korean or English letters");
+
+        if (normalized.matches("[가-힣]+")) {
+            this.name = trimmed;
+            return;
         }
-        this.name = trimmed;
+        if (normalized.matches("[A-Za-z]+")) {
+            this.name = trimmed;
+            return;
+        }
+
+        throw new ValidationException("Name must contain only Korean or English letters");
     }
 
     public String getName() {
@@ -63,6 +64,10 @@ public abstract class Person implements Loginable {
 
     public String getMyId() {
         return this.myId;
+    }
+
+    public String getMyPassWd() {
+        return this.myPassWd;
     }
 
     public void setMyPassWd(String myPassWd) throws ValidationException {

@@ -30,11 +30,11 @@ public class MemoryUserRepository implements UserRepository {
     @Override
     public void add(Person p) throws DuplicateException, ValidationException {
         if (p == null) {
-            throw new ValidationException("Person cannot be null");
+            throw new ValidationException("사람은 비어있을 수 없습니다.");
         }
         String myId = p.getMyId();
         if (checkExistByMyId(myId)) {
-            throw new DuplicateException("Duplicate ID: " + myId);
+            throw new DuplicateException("중복된 ID입니다: " + myId);
         }
         this.users.add(p);
     }
@@ -57,7 +57,7 @@ public class MemoryUserRepository implements UserRepository {
                 return clonePerson(user);
             }
         }
-        throw new NotFoundException("User not found: " + trimmed);
+        throw new NotFoundException("사용자를 찾을 수 없습니다: " + trimmed);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class MemoryUserRepository implements UserRepository {
     @Override
     public void update(Person p) throws NotFoundException, ValidationException {
         if (p == null) {
-            throw new ValidationException("Person cannot be null");
+            throw new ValidationException("사람은 비어있을 수 없습니다.");
         }
         String myId = p.getMyId();
         validateMyId(myId);
@@ -84,14 +84,14 @@ public class MemoryUserRepository implements UserRepository {
                 return;
             }
         }
-        throw new NotFoundException("User not found: " + trimmed);
+        throw new NotFoundException("사용자를 찾을 수 없습니다: " + trimmed);
     }
 
     @Override
     public void remove(String myId) throws NotFoundException, ReferentialIntegrityException {
         String trimmed = myId == null ? null : myId.trim();
         if (trimmed == null || trimmed.isEmpty()) {
-            throw new NotFoundException("User not found: " + myId);
+            throw new NotFoundException("사용자를 찾을 수 없습니다: " + myId);
         }
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getMyId().equals(trimmed)) {
@@ -99,38 +99,37 @@ public class MemoryUserRepository implements UserRepository {
                 return;
             }
         }
-        throw new NotFoundException("User not found: " + trimmed);
+        throw new NotFoundException("사용자를 찾을 수 없습니다: " + trimmed);
     }
 
     private void validateMyId(String myId) throws ValidationException {
         if (myId == null) {
-            throw new ValidationException("ID cannot be null");
+            throw new ValidationException("ID는 비어있을 수 없습니다.");
         }
         String trimmed = myId.trim();
         if (trimmed.isEmpty()) {
-            throw new ValidationException("ID cannot be empty");
+            throw new ValidationException("ID는 비어있을 수 없습니다.");
         }
         if (trimmed.length() < 4) {
-            throw new ValidationException("ID must be at least 4 characters");
+            throw new ValidationException("ID는 최소 4자여야 합니다.");
         }
         if (!trimmed.matches("[A-Za-z0-9]+")) {
-            throw new ValidationException("ID must contain only English letters and digits");
+            throw new ValidationException("ID는 영어 대소문자와 숫자만 포함할 수 있습니다.");
         }
     }
 
     private Person clonePerson(Person original) {
         try {
             if (original instanceof Student) {
-                return new Student(original.getName(), original.getMyId(), original.getMyId() + "1234"); 
+                return new Student(original.getName(), original.getMyId(), original.compPassWd("") ? "" : original.getMyId() + "1234"); // 기존 코드
             }
             if (original instanceof Professor) {
-                return new Professor(original.getName(), original.getMyId(), original.getMyId() + "1234");
+                return new Professor(original.getName(), original.getMyId(), original.compPassWd("") ? "" : original.getMyId() + "1234");
             }
             if (original instanceof Chancellor) {
-                return new Chancellor(original.getName(), original.getMyId(), original.getMyId() + "1234");
+                return new Chancellor(original.getName(), original.getMyId(), original.compPassWd("") ? "" : original.getMyId() + "1234");
             }
             return original; 
-            
         } catch (ValidationException e) {
             throw new RuntimeException("객체 복사 중 오류 발생", e);
         }
@@ -156,7 +155,7 @@ public class MemoryUserRepository implements UserRepository {
                 return;
             }
         }
-        throw new NotFoundException("User not found: " + trimmed);
+        throw new NotFoundException("사용자를 찾을 수 없습니다: " + trimmed);
     }
 
     @Override
@@ -164,11 +163,11 @@ public class MemoryUserRepository implements UserRepository {
         try {
             Person p = findByMyId(userId);
             if (!p.compPassWd(password)) {
-                throw new AuthenticationException("Invalid credentials");
+                throw new AuthenticationException("인증 정보가 올바르지 않습니다.");
             }
             return p;
         } catch (NotFoundException e) {
-            throw new AuthenticationException("Invalid credentials");
+            throw new AuthenticationException("인증 정보가 올바르지 않습니다.");
         }
     }
 }

@@ -18,7 +18,6 @@ public class PersonView {
         this.scanner = new Scanner(System.in);
     }
 
-    // 1. 학생 등록 View
     public void registerStudentView() {
         System.out.println("\n=== [학생 등록] ===");
 
@@ -36,12 +35,13 @@ public class PersonView {
             System.out.println(">> 학생 등록 성공!");
         } catch (DuplicateException e) {
             System.out.println("[등록 실패] " + e.getMessage());
+        } catch (ValidationException e) {
+            System.out.println("[입력 오류] " + e.getMessage());
         } catch (Exception e) {
             System.out.println("[시스템 오류] 알 수 없는 오류가 발생했습니다.");
         }
     }
 
-    // 2. 교수 등록 View
     public void registerProfessorView() {
         System.out.println("\n=== [교수 등록] ===");
 
@@ -59,12 +59,13 @@ public class PersonView {
             System.out.println(">> 교수 등록 성공!");
         } catch (DuplicateException e) {
             System.out.println("[등록 실패] " + e.getMessage());
+        } catch (ValidationException e) {
+            System.out.println("[입력 오류] " + e.getMessage());
         } catch (Exception e) {
             System.out.println("[시스템 오류] 알 수 없는 오류가 발생했습니다.");
         }
     }
 
-    // 3. 사용자 정보 수정 View
     public void updatePersonView() {
         System.out.println("\n=== [사용자 정보 수정] ===");
 
@@ -89,7 +90,6 @@ public class PersonView {
         }
     }
 
-    // 4. 사용자 삭제 View
     public void deletePersonView() {
         System.out.println("\n=== [사용자 삭제] ===");
 
@@ -106,7 +106,6 @@ public class PersonView {
         }
     }
 
-    // 5. ID로 사용자 조회 View
     public void findPersonByIdView() {
         System.out.println("\n=== [ID로 사용자 조회] ===");
 
@@ -114,7 +113,7 @@ public class PersonView {
         String id = scanner.nextLine();
 
         try {
-            String info = personController.getPersonInfoById(id); // 문자열만 받음
+            String info = personController.getPersonInfoById(id); 
             System.out.println(info);
         } catch (NotFoundException e) {
             System.out.println("[조회 실패] " + e.getMessage());
@@ -123,7 +122,6 @@ public class PersonView {
         }
     }
 
-    // 6. 전체 사용자 목록 조회 View
     public void findAllUsersView() {
         System.out.println("\n=== [전체 사용자 목록] ===");
 

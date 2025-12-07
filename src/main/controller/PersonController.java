@@ -10,7 +10,7 @@ import main.repository.UserRepository;
 import main.exception.DuplicateException;
 import main.exception.NotFoundException;
 import main.exception.ValidationException;
-import main.exception.ReferentialIntegrityException; // import 추가
+import main.exception.ReferentialIntegrityException; 
 
 public class PersonController {
 

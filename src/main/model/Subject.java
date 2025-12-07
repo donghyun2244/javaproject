@@ -106,11 +106,13 @@ public class Subject {
 
     public void setProfessorId(String professorId) throws ValidationException {
         if (professorId == null) {
-            throw new ValidationException("Professor ID cannot be null");
+            this.professorId = "";
+            return;
         }
         String trimmed = professorId.trim();
         if (trimmed.isEmpty()) {
-            throw new ValidationException("Professor ID cannot be empty");
+            this.professorId = "";
+            return;
         }
         if (trimmed.length() < 4) {
             throw new ValidationException("Professor ID must be at least 4 characters");

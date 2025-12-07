@@ -51,7 +51,7 @@ public class FileUserRepository implements UserRepository {
             Files.createDirectories(dir);
             writeString(dir.resolve("name.txt"), p.getName());
             writeString(dir.resolve("myId.txt"), p.getMyId());
-            writeString(dir.resolve("myPassWd.txt"), p.getMyId() + "1234"); // 임시 비밀번호
+            writeString(dir.resolve("myPassWd.txt"), p.getMyPassWd()); 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -213,17 +213,17 @@ public class FileUserRepository implements UserRepository {
 
     private void validateMyId(String myId) throws ValidationException {
         if (myId == null) {
-            throw new ValidationException("ID cannot be null");
+            throw new ValidationException("ID는 비어있을 수 없습니다.");
         }
         String trimmed = myId.trim();
         if (trimmed.isEmpty()) {
-            throw new ValidationException("ID cannot be empty");
+            throw new ValidationException("ID는 비어있을 수 없습니다.");
         }
         if (trimmed.length() < 4) {
-            throw new ValidationException("ID must be at least 4 characters");
+            throw new ValidationException("ID는 최소 4자 이상이어야 합니다.");
         }
         if (!trimmed.matches("[A-Za-z0-9]+")) {
-            throw new ValidationException("ID must contain only English letters and digits");
+            throw new ValidationException("ID는 영어 대소문자와 숫자만 포함할 수 있습니다.");
         }
     }
 
@@ -242,7 +242,7 @@ public class FileUserRepository implements UserRepository {
         validateMyId(userId);
         Path dir = findPersonDirById(userId);
         if (dir == null || !Files.exists(dir)) {
-            throw new NotFoundException("User not found: " + userId);
+            throw new NotFoundException("사용자를 찾을 수 없습니다: " + userId);
         }
         try {
             writeString(dir.resolve("myPassWd.txt"), newPassword);
@@ -256,11 +256,11 @@ public class FileUserRepository implements UserRepository {
         try {
             Person p = findByMyId(userId);
             if (!p.compPassWd(password)) {
-                throw new AuthenticationException("Invalid credentials");
+                throw new AuthenticationException("잘못된 자격 증명입니다");
             }
             return p;
         } catch (NotFoundException e) {
-            throw new AuthenticationException("Invalid credentials");
+            throw new AuthenticationException("잘못된 자격 증명입니다");
         }
     }
 }

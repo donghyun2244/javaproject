@@ -22,14 +22,12 @@ public class ScoreController {
             throw new NotFoundException("해당 과목의 수강생이 아닙니다.");
         }
 
-        // Subject 클래스에 setScore(studentId, score) 메서드가 있다고 가정
-        // 혹은 sub.getScores().put(studentId, score); 와 같이 직접 접근
         sub.getScores().put(studentId, score); 
         repo.update(sub);
     }
 
     public void updateScore(String subjectCode, String studentId, int newScore) throws NotFoundException, ValidationException {
-        inputScore(subjectCode, studentId, newScore); // 등록 로직과 동일
+        inputScore(subjectCode, studentId, newScore); 
     }
 
     public double getSubjectAverage(String subjectCode) throws NotFoundException {
@@ -37,15 +35,12 @@ public class ScoreController {
         try {
             sub = getSubjectRepo().findByIdNum(subjectCode);
         } catch (NotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (ValidationException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         if (sub == null) throw new NotFoundException("과목을 찾을 수 없습니다.");
         
-        // Subject 클래스 내 점수 저장 구조가 HashMap<String, Integer> scores 라고 가정
         if (sub.getScores().isEmpty()) return 0.0;
         
         int sum = 0;
@@ -56,8 +51,7 @@ public class ScoreController {
     }
 
     public boolean checkScholarshipEligibility(String studentId) throws NotFoundException {
-        // 전체 과목을 돌며 해당 학생의 평점 계산 로직 필요
-        // (간단한 예시: 등록된 모든 과목 평균이 90 이상이면 장학금)
+
         int totalScore = 0;
         int count = 0;
         

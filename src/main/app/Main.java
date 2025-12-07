@@ -23,10 +23,10 @@ public class Main {
     private static ScoreView scoreView;
 
     public static void main(String[] args) {
-        system.initSystem(); // 1. 초기화
-        initViews();         // 2. 뷰 생성
-        runMainLoop();       // 3. 실행
-        system.saveAll();    // 4. 종료 시 저장
+        system.initSystem(); // 초기화
+        initViews();         // 뷰 생성
+        runMainLoop();       // 실행
+        system.saveAll();    // 종료 시 저장
         scanner.close();
     }
 
@@ -41,7 +41,7 @@ public class Main {
         while (true) {
             Person currentUser = system.getCurrentUser();
 
-            // [상태 1] 로그인 전
+            //로그인 하기 전
             if (currentUser == null) {
                 System.out.println("\n===== [학사 관리 시스템] =====");
                 System.out.println("1. 로그인");
@@ -52,11 +52,9 @@ public class Main {
                 String choice = scanner.nextLine();
                 switch (choice) {
                     case "1":
-                        // [수정] 객체 변수명(authView) 사용 및 메서드명(loginView) 수정
                         authView.loginView(); 
                         break;
                     case "2":
-                        // [수정] 회원가입 메뉴 직접 구현 (AuthView에 registerMenu가 없으므로)
                         runRegisterMenu();
                         break;
                     case "0":
@@ -67,7 +65,7 @@ public class Main {
                 }
 
             } 
-            // [상태 2] 로그인 후
+            //로그인 후
             else {
                 System.out.println("\n===== [" + currentUser.getName() + "님 환영합니다] =====");
                 System.out.println("1. 내 정보 관리");
@@ -80,8 +78,8 @@ public class Main {
                 String choice = scanner.nextLine();
                 switch (choice) {
                     case "1":
-                        // PersonView에 내 정보 보기 기능이 있다면 호출 (현재 코드엔 없어서 주석)
-                         personView.findPersonByIdView(); // 임시로 조회 기능 연결
+                        
+                         personView.findPersonByIdView(); 
                         break;
                     case "2":
                         runSubjectMenu(currentUser);
@@ -90,7 +88,6 @@ public class Main {
                         runScoreMenu(currentUser);
                         break;
                     case "9":
-                        // [수정] 로그아웃 처리
                         authView.logoutView();
                         break;
                     case "0":
@@ -103,7 +100,6 @@ public class Main {
         }
     }
 
-    // [추가] 회원가입 서브 메뉴
     private static void runRegisterMenu() {
         System.out.println("\n--- [회원가입] ---");
         System.out.println("1. 학생으로 가입");
@@ -128,7 +124,6 @@ public class Main {
                 System.out.println("잘못된 선택입니다.");
             }
         } catch (Exception e) {
-            // 상세 오류 메시지 출력: "알 수 없는 오류" 대신 예외 메시지와 스택트레이스로 원인 파악 가능
             System.out.println("회원가입 중 오류가 발생했습니다: " + (e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName()));
             e.printStackTrace();
         }
@@ -152,7 +147,6 @@ public class Main {
             String choice = scanner.nextLine();
             if (choice.equals("0")) break;
 
-            // 권한 체크 없이 메뉴 호출 시 컨트롤러/뷰 내부에서 예외처리 되거나, 여기서 if문으로 막아야 함
             switch (choice) {
                 case "1": subjectView.createSubjectView(); break;
                 case "2": subjectView.updateSubjectView(); break;
