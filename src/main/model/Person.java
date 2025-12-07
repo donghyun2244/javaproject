@@ -93,6 +93,19 @@ public abstract class Person implements Loginable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return myId.equals(person.myId);
+    }
+
+    @Override
+    public int hashCode() {
+        return myId.hashCode();
+    }
+
+    @Override
     public abstract boolean login(String myId, String myPassWd);
 }
 
