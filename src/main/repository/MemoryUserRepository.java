@@ -119,45 +119,57 @@ public class MemoryUserRepository implements UserRepository {
     }
 
     private Person clonePerson(Person original) {
-    try {
-        if (original instanceof Student) {
-            return new Student(original.getName(), original.getMyId(), ""); 
+        try {
+            if (original instanceof Student) {
+                return new Student(original.getName(), original.getMyId(), original.getMyId() + "1234"); 
+            }
+            if (original instanceof Professor) {
+                return new Professor(original.getName(), original.getMyId(), original.getMyId() + "1234");
+            }
+            if (original instanceof Chancellor) {
+                return new Chancellor(original.getName(), original.getMyId(), original.getMyId() + "1234");
+            }
+            return original; 
+            
+        } catch (ValidationException e) {
+            throw new RuntimeException("객체 복사 중 오류 발생", e);
         }
-        if (original instanceof Professor) {
-            return new Professor(original.getName(), original.getMyId(), "");
-        }
-        if (original instanceof Chancellor) {
-            return new Chancellor(original.getName(), original.getMyId(), "");
-        }
-        return original; 
-        
-    } catch (ValidationException e) {
-        throw new RuntimeException("객체 복사 중 오류 발생", e);
     }
-}
 
     @Override
     public Person getById(String userId) throws ValidationException, NotFoundException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getById'");
+        return findByMyId(userId);
     }
 
     @Override
     public boolean existsById(String userId) throws ValidationException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'existsById'");
+        return checkExistByMyId(userId);
     }
 
     @Override
     public void changePassword(String userId, String newPassword) throws ValidationException, NotFoundException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'changePassword'");
+        validateMyId(userId);
+        String trimmed = userId.trim();
+        for (Person user : users) {
+            if (user.getMyId().equals(trimmed)) {
+                user.setMyPassWd(newPassword);
+                return;
+            }
+        }
+        throw new NotFoundException("User not found: " + trimmed);
     }
 
     @Override
     public Person authenticate(String userId, String password) throws ValidationException, AuthenticationException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'authenticate'");
+        try {
+            Person p = findByMyId(userId);
+            if (!p.compPassWd(password)) {
+                throw new AuthenticationException("Invalid credentials");
+            }
+            return p;
+        } catch (NotFoundException e) {
+            throw new AuthenticationException("Invalid credentials");
+        }
     }
 }
 

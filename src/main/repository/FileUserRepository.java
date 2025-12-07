@@ -37,7 +37,7 @@ public class FileUserRepository implements UserRepository {
     }
 
     @Override
-    public void add(Person p) throws DuplicateException, ValidationException ,ValidationException{
+    public void add(Person p) throws DuplicateException, ValidationException {
         if (p == null) {
             throw new ValidationException("Person cannot be null");
         }
@@ -51,7 +51,7 @@ public class FileUserRepository implements UserRepository {
             Files.createDirectories(dir);
             writeString(dir.resolve("name.txt"), p.getName());
             writeString(dir.resolve("myId.txt"), p.getMyId());
-            writeString(dir.resolve("myPassWd.txt"), "");
+            writeString(dir.resolve("myPassWd.txt"), p.getMyId() + "1234"); // 임시 비밀번호
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -161,7 +161,7 @@ public class FileUserRepository implements UserRepository {
         if (Files.exists(professorDir)) {
             return professorDir;
         }
-        Path chancellorDir = base.resolve(CHANCELLOR_DIR);
+        Path chancellorDir = base.resolve(CHANCELLOR_DIR).resolve(myId);
         if (Files.exists(chancellorDir)) {
             return chancellorDir;
         }
@@ -229,26 +229,39 @@ public class FileUserRepository implements UserRepository {
 
     @Override
     public Person getById(String userId) throws ValidationException, NotFoundException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getById'");
+        return findByMyId(userId);
     }
 
     @Override
     public boolean existsById(String userId) throws ValidationException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'existsById'");
+        return checkExistByMyId(userId);
     }
 
     @Override
     public void changePassword(String userId, String newPassword) throws ValidationException, NotFoundException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'changePassword'");
+        validateMyId(userId);
+        Path dir = findPersonDirById(userId);
+        if (dir == null || !Files.exists(dir)) {
+            throw new NotFoundException("User not found: " + userId);
+        }
+        try {
+            writeString(dir.resolve("myPassWd.txt"), newPassword);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public Person authenticate(String userId, String password) throws ValidationException, AuthenticationException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'authenticate'");
+        try {
+            Person p = findByMyId(userId);
+            if (!p.compPassWd(password)) {
+                throw new AuthenticationException("Invalid credentials");
+            }
+            return p;
+        } catch (NotFoundException e) {
+            throw new AuthenticationException("Invalid credentials");
+        }
     }
 }
 

@@ -17,7 +17,7 @@ public class PersonController {
     private UserRepository getUserRepo() {
         return SystemController.getInstance().getUserRepository();
     }
-
+    
     public void registerStudent(String name, String id, String pw) throws DuplicateException, ValidationException {
         Student newStudent = new Student(name, id, pw);
         getUserRepo().add(newStudent);
@@ -35,17 +35,19 @@ public class PersonController {
             throw new NotFoundException("사용자를 찾을 수 없습니다.");
         }
         
-        if (newPw != null && !newPw.isBlank()) {
-            repo.changePassword(id, newPw);
-        }
-
         Person p = repo.getById(id);
+        
         if (newName != null && !newName.isBlank()) {
             p.setName(newName);
         }
+        
+        if (newPw != null && !newPw.isBlank()) {
+            p.setMyPassWd(newPw);
+        }
+        
+        repo.update(p);
     }
 
-    // [수정] ReferentialIntegrityException 추가
     public void deletePerson(String id) throws NotFoundException, ValidationException, ReferentialIntegrityException {
         UserRepository repo = getUserRepo();
         repo.remove(id);
