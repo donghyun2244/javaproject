@@ -122,6 +122,17 @@ public class PersonView {
         }
     }
 
+    public void showMyInfoView(String myId) {
+        System.out.println("\n=== [내 정보] ===");
+        try {
+
+            String info = personController.getPersonInfoById(myId);
+            System.out.println(info);
+        } catch (Exception e) {
+            System.out.println("정보를 불러오는 중 오류가 발생했습니다: " + e.getMessage());
+        }
+    }
+
     public void findAllUsersView() {
         System.out.println("\n=== [전체 사용자 목록] ===");
 

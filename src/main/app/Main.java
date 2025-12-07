@@ -77,9 +77,8 @@ public class Main {
                 String choice = scanner.nextLine();
                 switch (choice) {
                     case "1":
-                        
-                         personView.findPersonByIdView(); 
-                        break;
+                    personView.showMyInfoView(currentUser.getMyId()); 
+                    break;
                     case "2":
                         runSubjectMenu(currentUser);
                         break;
@@ -131,13 +130,42 @@ public class Main {
     private static void runSubjectMenu(Person user) {
         while (true) {
             System.out.println("\n--- [과목 관리 메뉴] ---");
+            System.out.println("1. 전체 과목 조회");
             if (user instanceof Professor || user instanceof Chancellor) {
-                System.out.println("1. 과목 개설");
-                System.out.println("2. 과목 정보 수정");
-                System.out.println("3. 과목 폐강");
+                System.out.println("2. 과목 개설");
+                System.out.println("3. 과목 정보 수정");
+                System.out.println("4. 과목 폐강");
             }
             if (user instanceof Student) {
-                System.out.println("4. 수강 신청");
+                System.out.println("5. 수강 신청");
+            }
+            
+            System.out.println("0. 뒤로 가기");
+            System.out.print("선택 >> ");
+
+            String choice = scanner.nextLine();
+            if (choice.equals("0")) break;
+
+            switch (choice) {
+                case "1": subjectView.printAllSubjects(); break;
+                case "2": subjectView.createSubjectView(); break;
+                case "3": subjectView.updateSubjectView(); break;
+                case "4": subjectView.deleteSubjectView(); break;
+                case "5": subjectView.applySubjectView(); break;
+                
+                default: System.out.println("잘못된 입력입니다.");
+            }
+        }
+    }
+
+    private static void runScoreMenu(Person user) {
+        while (true) {
+            System.out.println("\n--- [성적 관리 메뉴] ---");
+            System.out.println("1. 과목별 평균 조회");
+            System.out.println("2. 장학금 대상 확인");
+            if (user instanceof Professor) {
+                System.out.println("3. 성적 등록");
+                System.out.println("4. 성적 수정");
             }
             System.out.println("5. 전체 과목 조회");
             System.out.println("0. 뒤로 가기");
@@ -147,36 +175,11 @@ public class Main {
             if (choice.equals("0")) break;
 
             switch (choice) {
-                case "1": subjectView.createSubjectView(); break;
-                case "2": subjectView.updateSubjectView(); break;
-                case "3": subjectView.deleteSubjectView(); break;
-                case "4": subjectView.applySubjectView(); break;
+                case "1": scoreView.printSubjectStatisticsView(); break;
+                case "2": scoreView.checkScholarshipView(); break;
+                case "3": scoreView.registerScoreView(); break;
+                case "4": scoreView.updateScoreView(); break;
                 case "5": subjectView.printAllSubjects(); break;
-                default: System.out.println("잘못된 입력입니다.");
-            }
-        }
-    }
-
-    private static void runScoreMenu(Person user) {
-        while (true) {
-            System.out.println("\n--- [성적 관리 메뉴] ---");
-            if (user instanceof Professor) {
-                System.out.println("1. 성적 등록");
-                System.out.println("2. 성적 수정");
-            }
-            System.out.println("3. 과목별 평균 조회");
-            System.out.println("4. 장학금 대상 확인");
-            System.out.println("0. 뒤로 가기");
-            System.out.print("선택 >> ");
-
-            String choice = scanner.nextLine();
-            if (choice.equals("0")) break;
-
-            switch (choice) {
-                case "1": scoreView.registerScoreView(); break;
-                case "2": scoreView.updateScoreView(); break;
-                case "3": scoreView.printSubjectStatisticsView(); break;
-                case "4": scoreView.checkScholarshipView(); break;
                 default: System.out.println("잘못된 입력입니다.");
             }
         }

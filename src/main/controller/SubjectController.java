@@ -3,7 +3,7 @@ package main.controller;
 import java.util.ArrayList;
 import main.model.Subject;
 import main.repository.SubjectRepository;
-import main.repository.UserRepository;
+import main.repository.UserRepository; 
 import main.exception.DuplicateException;
 import main.exception.NotFoundException;
 import main.exception.ValidationException;
@@ -24,12 +24,12 @@ public class SubjectController {
         throws ValidationException, DuplicateException, NotFoundException {
         
         if (subName == null || subName.isBlank()) {
-            throw new ValidationException("과목명 영어로 입력해주세요.");
+            throw new ValidationException("과목명을 입력해주세요.");
         }
-        
+
         SubjectRepository subRepo = getSubjectRepo();
         int currentSize = subRepo.getAll().size();
-        String newId = String.format("%04d", currentSize + 1); 
+        String newId = String.format("%04d", currentSize + 1); // 0001, 0002...
 
         if (profId != null && !profId.isBlank()) {
             if (!getUserRepo().existsById(profId)) { 
@@ -47,8 +47,9 @@ public class SubjectController {
         throws NotFoundException, ValidationException {
         
         SubjectRepository subRepo = getSubjectRepo();
-        
         Subject sub = subRepo.findByIdNum(code);
+
+        if (sub == null) throw new NotFoundException("해당 과목을 찾을 수 없습니다.");
 
         if (newProfId != null && !newProfId.isBlank()) {
             if (!getUserRepo().existsById(newProfId)) {
@@ -71,6 +72,9 @@ public class SubjectController {
         SubjectRepository repo = getSubjectRepo();
         Subject sub = repo.findByIdNum(code);
         
+        if (sub == null) throw new NotFoundException("해당 과목을 찾을 수 없습니다.");
+
+        // 수강생이 있으면 삭제 불가
         if (sub.getStudentsId() != null && !sub.getStudentsId().isEmpty()) {
             throw new ReferentialIntegrityException("수강생이 있는 과목은 삭제할 수 없습니다.");
         }
@@ -89,6 +93,7 @@ public class SubjectController {
         }
 
         Subject sub = subRepo.findByIdNum(subjectCode);
+        if (sub == null) throw new NotFoundException("과목을 찾을 수 없습니다.");
         
         sub.addStudent(studentId); 
         
@@ -97,6 +102,7 @@ public class SubjectController {
 
     // 전체 과목 조회
     public ArrayList<Subject> getAllSubjects() {
+
         return (ArrayList<Subject>) getSubjectRepo().getAll();
     }
 }

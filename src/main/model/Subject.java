@@ -249,5 +249,10 @@ public class Subject {
         }
         return copy;
     }
+    
+    @Override
+    public String toString() {
+        return "[" + idNum + "] " + subjectName + " (담당교수: " + professorId + ")";
+    }
 }
 
