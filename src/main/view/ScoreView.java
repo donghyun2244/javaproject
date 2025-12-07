@@ -2,7 +2,6 @@ package main.view; // 패키지 선언 추가
 
 import java.util.Scanner;
 import main.controller.ScoreController;
-// 문서에 명시된 예외 클래스 import
 import main.exception.ValidationException;
 import main.exception.NotFoundException;
 

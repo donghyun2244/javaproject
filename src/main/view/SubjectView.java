@@ -1,10 +1,9 @@
-package main.view; // 패키지 선언 추가
+package main.view; 
 
 import java.util.Scanner;
 import java.util.ArrayList;
 import main.controller.SubjectController;
 import main.model.Subject;
-// 문서에 명시된 예외 클래스 import
 import main.exception.ValidationException;
 import main.exception.NotFoundException;
 import main.exception.DuplicateException;

@@ -16,7 +16,6 @@ public class Main {
     private static Scanner scanner = new Scanner(System.in);
     private static SystemController system = SystemController.getInstance();
 
-    // View 객체들
     private static AuthView authView;
     private static PersonView personView;
     private static SubjectView subjectView;
