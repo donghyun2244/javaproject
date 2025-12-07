@@ -2,12 +2,15 @@ package main.controller;
 
 import java.util.ArrayList;
 import main.model.Subject;
+import main.model.Person;      
+import main.model.Professor;   
 import main.repository.SubjectRepository;
-import main.repository.UserRepository; 
+import main.repository.UserRepository;
 import main.exception.DuplicateException;
 import main.exception.NotFoundException;
 import main.exception.ValidationException;
 import main.exception.ReferentialIntegrityException;
+import main.exception.PermissionException; 
 
 public class SubjectController {
 
@@ -44,13 +47,19 @@ public class SubjectController {
 
     // 과목 수정
     public void updateSubject(String code, String newName, String newProfId) 
-        throws NotFoundException, ValidationException {
+        throws NotFoundException, ValidationException, PermissionException {
         
         SubjectRepository subRepo = getSubjectRepo();
         Subject sub = subRepo.findByIdNum(code);
 
         if (sub == null) throw new NotFoundException("해당 과목을 찾을 수 없습니다.");
 
+        Person currentUser = SystemController.getInstance().getCurrentUser();
+        if (currentUser instanceof Professor) {
+            if (!sub.getProfessorId().equals(currentUser.getMyId())) {
+                throw new PermissionException("본인의 과목만 수정할 수 있습니다.");
+            }
+        }
         if (newProfId != null && !newProfId.isBlank()) {
             if (!getUserRepo().existsById(newProfId)) {
                 throw new NotFoundException("해당 ID의 교수를 찾을 수 없습니다.");
@@ -67,7 +76,7 @@ public class SubjectController {
 
     // 과목 삭제
     public void deleteSubject(String code) 
-        throws NotFoundException, ValidationException, ReferentialIntegrityException {
+        throws NotFoundException, ValidationException, ReferentialIntegrityException, PermissionException {
         
         SubjectRepository repo = getSubjectRepo();
         Subject sub = repo.findByIdNum(code);
@@ -75,6 +84,10 @@ public class SubjectController {
         if (sub == null) throw new NotFoundException("해당 과목을 찾을 수 없습니다.");
 
         // 수강생이 있으면 삭제 불가
+        if (!sub.getProfessorId().equals(SystemController.getInstance().getCurrentUser().getMyId())) {
+            throw new PermissionException("본인의 과목만 삭제할 수 있습니다.");
+        }
+
         if (sub.getStudentsId() != null && !sub.getStudentsId().isEmpty()) {
             throw new ReferentialIntegrityException("수강생이 있는 과목은 삭제할 수 없습니다.");
         }

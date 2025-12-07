@@ -148,10 +148,23 @@ public class Main {
 
             switch (choice) {
                 case "1": subjectView.printAllSubjects(); break;
-                case "2": subjectView.createSubjectView(); break;
-                case "3": subjectView.updateSubjectView(); break;
-                case "4": subjectView.deleteSubjectView(); break;
-                case "5": subjectView.applySubjectView(); break;
+                case "2": if (user instanceof Professor) {
+                        subjectView.createMySubjectView(user.getMyId());
+                    } else {
+                        subjectView.createSubjectView();
+                    } break;
+                case "3": subjectView.printAllSubjects();  
+                subjectView.updateSubjectView(); break;
+                case "4":
+                subjectView.printAllSubjects();  
+                subjectView.deleteSubjectView(); break;
+                case "5": 
+                subjectView.printAllSubjects();
+                if (user instanceof Student) {
+                        subjectView.applyMySubjectView(user.getMyId());
+                    } else {
+                        subjectView.applySubjectView();
+                    } break;
                 
                 default: System.out.println("잘못된 입력입니다.");
             }
@@ -161,7 +174,7 @@ public class Main {
     private static void runScoreMenu(Person user) {
         while (true) {
             System.out.println("\n--- [성적 관리 메뉴] ---");
-            System.out.println("1. 과목별 평균 조회");
+            System.out.println("1. 과목 평균 조회");
             System.out.println("2. 장학금 대상 확인");
             if (user instanceof Professor) {
                 System.out.println("3. 성적 등록");
@@ -175,10 +188,19 @@ public class Main {
             if (choice.equals("0")) break;
 
             switch (choice) {
-                case "1": scoreView.printSubjectStatisticsView(); break;
-                case "2": scoreView.checkScholarshipView(); break;
-                case "3": scoreView.registerScoreView(); break;
-                case "4": scoreView.updateScoreView(); break;
+                case "1": 
+                subjectView.printAllSubjects(); 
+                scoreView.printSubjectStatisticsView(); break;
+                case "2": if (user instanceof Student) {
+                        scoreView.checkMyScholarshipView(user.getMyId());
+                    } else {
+                        scoreView.checkScholarshipView();
+                    } 
+                    break;
+                case "3": subjectView.printAllSubjects();
+                scoreView.registerScoreView(); break;
+                case "4": subjectView.printAllSubjects(); 
+                scoreView.updateScoreView(); break;
                 case "5": subjectView.printAllSubjects(); break;
                 default: System.out.println("잘못된 입력입니다.");
             }

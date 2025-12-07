@@ -4,6 +4,12 @@ import java.util.Scanner;
 import main.controller.ScoreController;
 import main.exception.ValidationException;
 import main.exception.NotFoundException;
+import main.exception.PermissionException;
+import java.util.ArrayList;
+
+import java.util.Scanner;
+
+
 
 public class ScoreView {
 
@@ -19,6 +25,21 @@ public class ScoreView {
         System.out.println("\n[성적 등록]");
         System.out.print("과목 코드 입력: ");
         String subjectCode = scanner.nextLine();
+        try {
+            ArrayList<String> students = scoreController.getEnrolledStudentsInfo(subjectCode);
+            System.out.println("\n--- [" + subjectCode + "번 과목 수강생 목록] ---");
+            if (students.isEmpty()) {
+                System.out.println("(수강생이 없습니다)");
+            } else {
+                for (String info : students) {
+                    System.out.println(" - " + info);
+                }
+            }
+            System.out.println("--------------------------------");
+        } catch (Exception e) {
+            System.out.println(">> 목록 조회 실패: " + e.getMessage());
+            return; 
+        }
         System.out.print("학생 ID 입력: ");
         String studentId = scanner.nextLine();
         System.out.print("점수 입력(0~100): ");
@@ -92,6 +113,23 @@ public class ScoreView {
             }
         } catch (NotFoundException e) {
             System.out.println(">> 확인 실패: 수강 내역이 존재하지 않습니다.");
+        } catch (Exception e) {
+            System.out.println(">> 오류 발생: " + e.getMessage());
+        }
+    }
+
+    public void checkMyScholarshipView(String studentId) {
+        System.out.println("\n=== [내 장학금 수혜 여부] ===");
+        try {
+            boolean isEligible = scoreController.checkScholarshipEligibility(studentId);
+            
+            if (isEligible) {
+                System.out.println(">> 축하합니다! " + studentId + "님은 장학금 수혜 대상입니다.");
+            } else {
+                System.out.println(">> 아쉽지만 장학금 수혜 대상이 아닙니다.");
+            }
+        } catch (NotFoundException e) {
+            System.out.println(">> 확인 실패: 수강 내역이 없거나 성적이 등록되지 않았습니다.");
         } catch (Exception e) {
             System.out.println(">> 오류 발생: " + e.getMessage());
         }

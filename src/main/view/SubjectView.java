@@ -8,6 +8,7 @@ import main.exception.ValidationException;
 import main.exception.NotFoundException;
 import main.exception.DuplicateException;
 import main.exception.ReferentialIntegrityException;
+import main.exception.PermissionException;
 
 public class SubjectView {
 
@@ -40,9 +41,9 @@ public class SubjectView {
         System.out.println("\n[과목 정보 수정]");
         System.out.print("수정할 과목 코드 입력: ");
         String subjectCode = scanner.nextLine();
-        System.out.print("새로운 과목명 입력: ");
+        System.out.print("새로운 과목명 입력 (변경 없으면 엔터): "); 
         String newName = scanner.nextLine();
-        System.out.print("새로운 담당 교수 ID 입력: ");
+        System.out.print("새로운 담당 교수 ID 입력 (변경 없으면 엔터): ");
         String newProfId = scanner.nextLine();
 
         try {
@@ -50,6 +51,8 @@ public class SubjectView {
             System.out.println(">> 과목 정보가 수정되었습니다.");
         } catch (NotFoundException e) {
             System.out.println(">> 대상 없음: " + e.getMessage());
+        } catch (PermissionException e) { 
+            System.out.println(">> 권한 경고: " + e.getMessage());
         } catch (Exception e) {
             System.out.println(">> 오류 발생: " + e.getMessage());
         }
@@ -66,7 +69,9 @@ public class SubjectView {
         } catch (NotFoundException e) {
             System.out.println(">> 대상 없음: " + e.getMessage());
         } catch (ReferentialIntegrityException e) {
-            System.out.println(">> 삭제 불가: 수강생이 있는 과목은 삭제할 수 없습니다.");
+            System.out.println(">> 삭제 불가: " + e.getMessage());
+        } catch (PermissionException e) {
+            System.out.println(">> 권한 경고: " + e.getMessage());
         } catch (Exception e) {
             System.out.println(">> 오류 발생: " + e.getMessage());
         }
@@ -100,6 +105,41 @@ public class SubjectView {
         }
         for(Subject s : list) {
             System.out.println(s); 
+        }
+    }
+
+    public void applyMySubjectView(String studentId) {
+        System.out.println("\n[수강 신청]");
+        
+        System.out.print("신청할 과목 코드 입력: ");
+        String subjectCode = scanner.nextLine();
+
+        try {
+            subjectController.applySubject(studentId, subjectCode);
+            System.out.println(">> 수강 신청이 완료되었습니다.");
+        } catch (NotFoundException e) {
+            System.out.println(">> 신청 실패: 과목 정보가 없습니다.");
+        } catch (DuplicateException e) {
+            System.out.println(">> 신청 실패: 이미 수강 중인 과목입니다.");
+        } catch (Exception e) {
+            System.out.println(">> 오류 발생: " + e.getMessage());
+        }
+    }
+
+    public void createMySubjectView(String profId) {
+        System.out.println("\n[과목 생성]");
+        
+        System.out.print("확인 할 과목명 입력: ");
+        String subName = scanner.nextLine();
+
+        try {
+
+            subjectController.createSubject(subName, profId);
+            System.out.println(">> 과목이 성공적으로 개설되었습니다.");
+        } catch (ValidationException e) {
+            System.out.println(">> 입력 오류: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println(">> 오류 발생: " + e.getMessage());
         }
     }
 }
